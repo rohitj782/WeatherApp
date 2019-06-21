@@ -17,18 +17,23 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //toolbar
         setSupportActionBar(toolbar)
 
+        //nav graph
         navController = Navigation.findNavController(this,R.id.nav_host_fragment)
 
+        //bottom navigation
         bottom_nav.setupWithNavController(navController)
 
+        //action bar
         NavigationUI.setupActionBarWithNavController(this,navController)
 
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        //used for back navigation ...up arrows
+        //used for back navigation ...back arrows
         return NavigationUI.navigateUp(navController,null)
     }
 }
