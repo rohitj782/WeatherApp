@@ -1,8 +1,8 @@
-package com.rohitrj.weatherapp.data.response
+package com.rohitrj.weatherapp.data.db.entity
 
 
 data class Condition(
-    val code: Int,
+    val code: Double,
     val icon: String,
     val text: String
 )

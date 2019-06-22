@@ -1,10 +1,19 @@
-package com.rohitrj.weatherapp.data.response
+package com.rohitrj.weatherapp.data.db.entity
 
 
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+const val CURRENT_WEATHER_ID = 0
+
+@Entity(tableName = "current_weather")
 data class CurrentWeatherEntry(
-    val cloud: Int,
+
+    val cloud: Double,
+
+    @Embedded(prefix = "condition_")      //embedded is used to save user defined objects
     val condition: Condition,
     @SerializedName("feelslike_c")
     val feelslikeC: Double,
@@ -14,21 +23,17 @@ data class CurrentWeatherEntry(
     val gustKph: Double,
     @SerializedName("gust_mph")
     val gustMph: Double,
-    val humidity: Int,
+    val humidity: Double,
     @SerializedName("is_day")
-    val isDay: Int,
+    val isDay: Double,
     @SerializedName("last_updated")
     val lastUpdated: String,
     @SerializedName("last_updated_epoch")
-    val lastUpdatedEpoch: Int,
+    val lastUpdatedEpoch: Double,
     @SerializedName("precip_in")
     val precipIn: Double,
     @SerializedName("precip_mm")
     val precipMm: Double,
-    @SerializedName("pressure_in")
-    val pressureIn: Double,
-    @SerializedName("pressure_mb")
-    val pressureMb: Double,
     @SerializedName("temp_c")
     val tempC: Double,
     @SerializedName("temp_f")
@@ -39,11 +44,14 @@ data class CurrentWeatherEntry(
     @SerializedName("vis_miles")
     val visMiles: Double,
     @SerializedName("wind_degree")
-    val windDegree: Int,
+    val windDegree: Double,
     @SerializedName("wind_dir")
     val windDir: String,
     @SerializedName("wind_kph")
     val windKph: Double,
     @SerializedName("wind_mph")
     val windMph: Double
-)
+){
+    @PrimaryKey(autoGenerate = false)
+    val id: Int = CURRENT_WEATHER_ID
+}

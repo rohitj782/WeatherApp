@@ -36,7 +36,10 @@ class TodayFragment : Fragment() {
 
         val apiService =  WeatherApiInterface.invoke()
         GlobalScope.launch(Dispatchers.Main) {
-            val response = apiService.getCurrentWeather(location = "Tanakpur").await()
+            var filter:HashMap<String,String> = HashMap()
+            filter["q"]="Tanakpur"
+
+            val response = apiService.getCurrentWeather(filter).await()
             Log.i("MYTAG", response.toString())
         }
 

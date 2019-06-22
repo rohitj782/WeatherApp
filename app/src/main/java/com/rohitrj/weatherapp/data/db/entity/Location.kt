@@ -1,6 +1,7 @@
-package com.rohitrj.weatherapp.data.response
+package com.rohitrj.weatherapp.data.db.entity
 
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
 data class Location(
@@ -8,7 +9,7 @@ data class Location(
     val lat: Double,
     val localtime: String,
     @SerializedName("localtime_epoch")
-    val localtimeEpoch: Int,
+    val localtimeEpoch: Double,
     val lon: Double,
     val name: String,
     val region: String,
