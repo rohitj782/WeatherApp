@@ -12,8 +12,7 @@ const val CURRENT_WEATHER_ID = 0
 data class CurrentWeatherEntry(
 
     val cloud: Double,
-
-    @Embedded(prefix = "condition_")      //embedded is used to save user defined objects
+    @Embedded(prefix = "condition_")      //embedded is used to save user defined objects in sqlite
     val condition: Condition,
     @SerializedName("feelslike_c")
     val feelslikeC: Double,
@@ -53,5 +52,5 @@ data class CurrentWeatherEntry(
     val windMph: Double
 ){
     @PrimaryKey(autoGenerate = false)
-    val id: Int = CURRENT_WEATHER_ID
+    var id: Int = CURRENT_WEATHER_ID
 }

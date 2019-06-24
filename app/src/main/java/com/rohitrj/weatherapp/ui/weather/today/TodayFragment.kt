@@ -7,9 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 
 import com.rohitrj.weatherapp.R
-import com.rohitrj.weatherapp.data.WeatherApiInterface
+import com.rohitrj.weatherapp.data.network.ConnecetvityInterceptorImpl
+import com.rohitrj.weatherapp.data.network.WeatherApiInterface
+import com.rohitrj.weatherapp.data.network.WeatherNetworkDataSourceImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,14 +37,17 @@ class TodayFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(TodayViewModel::class.java)
 
 
-        val apiService =  WeatherApiInterface.invoke()
-        GlobalScope.launch(Dispatchers.Main) {
-            var filter:HashMap<String,String> = HashMap()
-            filter["q"]="Tanakpur"
+        val apiService =  WeatherApiInterface(ConnecetvityInterceptorImpl(this.context!!))
+        val weatherNetworkDataSource = WeatherNetworkDataSourceImpl(apiService)
+        weatherNetworkDataSource.dowloadedCurrentWeather.observe(this,
+            Observer {
+                Log.i("MYTAG", it.toString())
 
-            val response = apiService.getCurrentWeather(filter).await()
-            Log.i("MYTAG", response.toString())
-        }
+            })
+
+        GlobalScope.launch(Dispatchers.Main) {
+          weatherNetworkDataSource.fetchCurrentWeather("tanakpur","en")
+            }
 
     }
 

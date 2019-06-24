@@ -1,4 +1,4 @@
-package com.rohitrj.weatherapp.data
+package com.rohitrj.weatherapp.data.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.rohitrj.weatherapp.data.network.response.CurrentWeatherResponse
@@ -17,19 +17,21 @@ const val API_KEY = "d33c0dbc82634eaca2f103532191906"
 
 interface WeatherApiInterface {
 
-    @GET("current.json")
+    @GET("current.json")    //end point url
     fun getCurrentWeather(@QueryMap map: HashMap<String,String>): Deferred<CurrentWeatherResponse> //deferred is a part of kotlin coroutine
 
 
     companion object {
-        operator fun invoke():WeatherApiInterface{
+        operator fun invoke(
+            connectivityInterceptor: ConnecetvityInterceptor
+        ): WeatherApiInterface {
 
             //interceptor is used to insert key query parameter ...although we can insert it directly ...
             val requestInterceptor = Interceptor{chain ->
                  val url = chain.request()
                      .url()
                      .newBuilder()
-                     .addQueryParameter("key", API_KEY)
+                     .addQueryParameter("key", API_KEY) //adding api key
                      .build()
                 val request = chain.request()
                     .newBuilder()
@@ -40,11 +42,12 @@ interface WeatherApiInterface {
             }
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
+                .addInterceptor(connectivityInterceptor)
                 .build()
             return  Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl("http://api.apixu.com/v1/")
-                .addCallAdapterFactory(CoroutineCallAdapterFactory()) //bcoz we have used the deferred object instead of call.
+                .addCallAdapterFactory(CoroutineCallAdapterFactory()) //because we have used the deferred object.
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(WeatherApiInterface::class.java)
