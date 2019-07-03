@@ -13,15 +13,19 @@ import com.rohitrj.weatherapp.R
 import com.rohitrj.weatherapp.data.network.ConnecetvityInterceptorImpl
 import com.rohitrj.weatherapp.data.network.WeatherApiInterface
 import com.rohitrj.weatherapp.data.network.WeatherNetworkDataSourceImpl
+import com.rohitrj.weatherapp.ui.base.ScopeFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
-class TodayFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = TodayFragment()
-    }
+class TodayFragment : ScopeFragment(),KodeinAware {
+
+    override val kodein by  closestKodein()
+    private val viewModelFactory:TodayViewmodelFactory by instance()
 
     private lateinit var viewModel: TodayViewModel
 
@@ -34,21 +38,21 @@ class TodayFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(TodayViewModel::class.java)
 
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TodayViewModel::class.java)
 
-        val apiService =  WeatherApiInterface(ConnecetvityInterceptorImpl(this.context!!))
-        val weatherNetworkDataSource = WeatherNetworkDataSourceImpl(apiService)
-        weatherNetworkDataSource.dowloadedCurrentWeather.observe(this,
-            Observer {
-                Log.i("MYTAG", it.toString())
+        bindUI()
 
-            })
-
-        GlobalScope.launch(Dispatchers.Main) {
-          weatherNetworkDataSource.fetchCurrentWeather("tanakpur","en")
-            }
 
     }
 
+    private fun bindUI()= launch{
+        val currentweather  = viewModel.weather.await()
+        currentweather.observe(this@TodayFragment, Observer {
+            if(it==null) return@Observer
+            Log.i("MYTAG", it.toString())
+        })
+    }
+
 }
+

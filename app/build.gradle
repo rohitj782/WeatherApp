@@ -60,13 +60,12 @@ dependencies {
     //Adapter factory
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
-    def lifecycle_version = "2.0.0"
     // ViewModel and LiveData
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha01'
 
     //kodein dependency injetion
-    implementation 'org.kodein.di:kodein-di-generic-jvm:6.3.0'
-    implementation 'org.kodein.di:kodein-di-framework-android-x:6.3.0'
+    implementation 'org.kodein.di:kodein-di-generic-jvm:6.3.1'
+    implementation 'org.kodein.di:kodein-di-framework-android-x:6.3.1'
 
     //glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
