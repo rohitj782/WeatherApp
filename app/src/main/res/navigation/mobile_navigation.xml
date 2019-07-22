@@ -13,7 +13,7 @@
     <fragment
             android:id="@+id/forecastDetailFragment"
             android:name="com.rohitrj.weatherapp.ui.weather.forecast.detail.ForecastDetailFragment"
-            android:label="forecast_detail_fragment"
+            android:label="Details"
             tools:layout="@layout/forecast_detail_fragment"/>
     <fragment
             android:id="@+id/forecastFragment"
