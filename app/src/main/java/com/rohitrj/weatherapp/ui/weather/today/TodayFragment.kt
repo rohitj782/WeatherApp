@@ -3,19 +3,13 @@ package com.rohitrj.weatherapp.ui.weather.today
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 
 import com.rohitrj.weatherapp.R
-import com.rohitrj.weatherapp.data.network.ConnecetvityInterceptorImpl
-import com.rohitrj.weatherapp.data.network.WeatherApiInterface
-import com.rohitrj.weatherapp.data.network.WeatherNetworkDataSourceImpl
 import com.rohitrj.weatherapp.ui.base.ScopeFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein

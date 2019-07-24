@@ -15,16 +15,18 @@ const val API_KEY = "d33c0dbc82634eaca2f103532191906"
 //required url
 // http://api.apixu.com/v1/current.json?key=d33c0dbc82634eaca2f103532191906&q=tanakpur
 
-interface WeatherApiInterface {
+interface WeatherApiService {
 
     @GET("current.json")    //end point url
-    fun getCurrentWeather(@QueryMap map: HashMap<String,String>): Deferred<CurrentWeatherResponse> //deferred is a part of kotlin coroutine
+    fun getCurrentWeather(
+        @QueryMap map: HashMap<String,String>
+    ): Deferred<CurrentWeatherResponse> //deferred is a part of kotlin coroutine
 
 
     companion object {
         operator fun invoke(
             connectivityInterceptor: ConnecetvityInterceptor
-        ): WeatherApiInterface {
+        ): WeatherApiService {
 
             //interceptor is used to insert key query parameter ...although we can insert it directly ...
             val requestInterceptor = Interceptor{chain ->
@@ -38,7 +40,7 @@ interface WeatherApiInterface {
                     .url(url)
                     .build()
 
-                return@Interceptor chain.proceed(request )
+                return@Interceptor chain.proceed(request)
             }
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
@@ -50,7 +52,7 @@ interface WeatherApiInterface {
                 .addCallAdapterFactory(CoroutineCallAdapterFactory()) //because we have used the deferred object.
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(WeatherApiInterface::class.java)
+                .create(WeatherApiService::class.java)
         }
     }
 }

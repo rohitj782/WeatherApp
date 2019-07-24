@@ -22,7 +22,7 @@ class ForecastApplication : Application(), KodeinAware {
         bind() from singleton { CurrentDatabase(instance()) }
         bind() from singleton { instance<CurrentDatabase>().currentWeatherDao() }
         bind<ConnecetvityInterceptor>() with singleton { ConnecetvityInterceptorImpl(instance()) }
-        bind() from singleton { WeatherApiInterface(instance()) }
+        bind() from singleton { WeatherApiService(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance()) }
         bind() from provider { TodayViewmodelFactory(instance()) }

@@ -7,7 +7,7 @@ import com.rohitrj.weatherapp.data.network.response.CurrentWeatherResponse
 import com.rohitrj.weatherapp.internal.NoConnectivityException
 
 class WeatherNetworkDataSourceImpl(
-    private val apixuService: WeatherApiInterface
+    private val apixuService: WeatherApiService
 ) : WeatherNetworkDataSource {
 
     private val _dowloadedCurrentWeather = MutableLiveData<CurrentWeatherResponse>()

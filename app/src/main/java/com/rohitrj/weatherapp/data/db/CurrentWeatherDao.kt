@@ -14,7 +14,8 @@ import com.rohitrj.weatherapp.data.db.unitlocalized.MetricCurrentWeather
 interface CurrentWeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)    //as all instance will have the same id
-    fun upsert(weatherEntry: CurrentWeatherEntry)
+    fun upsert(weatherEntry: CurrentWeatherEntry)       // they wiill replace the previous one
+
 
     @Query("Select * from current_weather where id = $CURRENT_WEATHER_ID")
     fun getMetricCurrentWeather(): LiveData<MetricCurrentWeather>
