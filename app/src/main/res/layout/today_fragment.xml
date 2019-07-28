@@ -51,8 +51,8 @@
 
     <ImageView
         android:id="@+id/imageViewIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
@@ -68,7 +68,7 @@
         android:layout_marginStart="32dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         android:textColor="@android:color/black"
-        android:textSize="36sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewIcon"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,6 +78,7 @@
         android:id="@+id/textViewFeelsLike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="@+id/textViewTemperature"
         app:layout_constraintStart_toStartOf="@+id/textViewTemperature"
         app:layout_constraintTop_toBottomOf="@+id/textViewTemperature" />
@@ -100,8 +101,7 @@
         android:id="@+id/textViewWindCondition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
