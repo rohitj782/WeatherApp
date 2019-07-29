@@ -47,11 +47,19 @@ class TodayFragment : ScopeFragment(),KodeinAware {
 
     private fun bindUI()= launch{
         val currentweather  = viewModel.weather.await()
+        val location = viewModel.weatherLocation.await()
+
+        location.observe(this@TodayFragment,
+                Observer { if(it == null)
+                        return@Observer
+                    updateLocation(it.name)
+
+                })
+
         currentweather.observe(this@TodayFragment, Observer {
             if(it==null) return@Observer
 
             groupLoading.visibility = View.INVISIBLE
-            updateLocation("Dehradun")
             updateTemp(it.temperature,it.feelsLikeTemperature)
             updatePrep(it.precipitationVolume)
             updateVisibility(it.visibilityDistance)

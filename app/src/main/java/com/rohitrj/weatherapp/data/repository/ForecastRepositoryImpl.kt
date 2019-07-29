@@ -7,6 +7,7 @@ import com.rohitrj.weatherapp.data.db.entity.WeatherLocation
 import com.rohitrj.weatherapp.data.db.unitlocalized.UnitSpecificCurrentWeather
 import com.rohitrj.weatherapp.data.network.WeatherNetworkDataSource
 import com.rohitrj.weatherapp.data.network.response.CurrentWeatherResponse
+import com.rohitrj.weatherapp.data.provider.LocationProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,9 +17,10 @@ import java.util.*
 
 
 class ForecastRepositoryImpl(
-    private val cuurrentWeatherDao: CurrentWeatherDao,
-    private val weatherNetworkDataSource: WeatherNetworkDataSource,
-    private val weatherLocationDao: WeatherLocationDao
+        private val cuurrentWeatherDao: CurrentWeatherDao,
+        private val weatherNetworkDataSource: WeatherNetworkDataSource,
+        private val weatherLocationDao: WeatherLocationDao,
+        private val locationProvider: LocationProvider
 
 ) : ForecastRepository {
     init {
@@ -29,40 +31,46 @@ class ForecastRepositoryImpl(
 
     //get data from the local repository
     override suspend fun getCurrentWeather(metric: Boolean): LiveData<out UnitSpecificCurrentWeather> {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             initWeatherData()
-            return@withContext if(metric) cuurrentWeatherDao.getMetricCurrentWeather()
+            return@withContext if (metric) cuurrentWeatherDao.getMetricCurrentWeather()
             else cuurrentWeatherDao.getImperialCurrentWeather()
         }
     }
 
-    private fun presistFetchedCurrentWeather(fetchedWeather: CurrentWeatherResponse){
-        GlobalScope.launch (Dispatchers.IO){
-            cuurrentWeatherDao.upsert(fetchedWeather.currentWeatherEntry )
+    private fun presistFetchedCurrentWeather(fetchedWeather: CurrentWeatherResponse) {
+        GlobalScope.launch(Dispatchers.IO) {
+            cuurrentWeatherDao.upsert(fetchedWeather.currentWeatherEntry)
+            weatherLocationDao.upsert(fetchedWeather.location)
         }
     }
 
     //for network calls
-    private suspend  fun initWeatherData(){
-       if(isFetchNeeded(ZonedDateTime.now().minusDays(1))){
-           fetchCurrentWeather()
-       }
+    private suspend fun initWeatherData() {
+        val lastLocation = weatherLocationDao.getLocation().value
+        if (lastLocation == null || locationProvider.hasLocationChanged(lastLocation)) {
+            fetchCurrentWeather()
+            return
+        }
+        if (isFetchNeeded(lastLocation.zonedDateTime)) {
+            fetchCurrentWeather()
+        }
     }
 
-    private suspend fun fetchCurrentWeather(){
+    private suspend fun fetchCurrentWeather() {
         weatherNetworkDataSource.fetchCurrentWeather(
-            "Dehradun"
-        , Locale.getDefault().language
+                locationProvider.getPreferredLocationString(),
+                Locale.getDefault().language
         )
     }
 
-    private fun isFetchNeeded(lastfetchTime:ZonedDateTime):Boolean{
+    private fun isFetchNeeded(lastfetchTime: ZonedDateTime): Boolean {
         val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
         return lastfetchTime.isBefore(thirtyMinutesAgo)
     }
 
-    override suspend fun getWeatherLocation(): LiveData<WeatherLocation>{
-        return withContext(Dispatchers.IO){
+    override suspend fun getWeatherLocation(): LiveData<WeatherLocation> {
+        return withContext(Dispatchers.IO) {
             return@withContext weatherLocationDao.getLocation()
         }
     }
