@@ -81,19 +81,19 @@ class TodayFragment : ScopeFragment(),KodeinAware {
 
     @SuppressLint("SetTextI18n")
     private fun updatePrep(prep:Double){
-        val unitAbbreviation = if(viewModel.isMetric)"°mm" else "°in"
+        val unitAbbreviation = if(viewModel.isMetric)"mm" else "in"
         textViewPrecipitation.text = "Precipitation: $prep $unitAbbreviation "
     }
     @SuppressLint("SetTextI18n")
     private fun updateWind(direction: String, speed: Double){
-        val unitAbbreviation = if(viewModel.isMetric)"°kph" else "°mph"
+        val unitAbbreviation = if(viewModel.isMetric)"kph" else "mph"
         textViewWindCondition.text = "Wind: $direction $speed $unitAbbreviation"
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateVisibility(visibility: Double){
-        val unitAbbreviation = if(viewModel.isMetric)"°km" else "°mi"
-        textViewVisibility.text = "Wind: $visibility $unitAbbreviation"
+        val unitAbbreviation = if(viewModel.isMetric)"km" else "mi"
+        textViewVisibility.text = "Visibility: $visibility $unitAbbreviation"
     }
 
 }

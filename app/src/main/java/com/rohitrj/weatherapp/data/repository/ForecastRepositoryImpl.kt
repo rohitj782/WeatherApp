@@ -2,6 +2,8 @@ package com.rohitrj.weatherapp.data.repository
 
 import androidx.lifecycle.LiveData
 import com.rohitrj.weatherapp.data.db.CurrentWeatherDao
+import com.rohitrj.weatherapp.data.db.WeatherLocationDao
+import com.rohitrj.weatherapp.data.db.entity.WeatherLocation
 import com.rohitrj.weatherapp.data.db.unitlocalized.UnitSpecificCurrentWeather
 import com.rohitrj.weatherapp.data.network.WeatherNetworkDataSource
 import com.rohitrj.weatherapp.data.network.response.CurrentWeatherResponse
@@ -15,7 +17,8 @@ import java.util.*
 
 class ForecastRepositoryImpl(
     private val cuurrentWeatherDao: CurrentWeatherDao,
-    private val weatherNetworkDataSource: WeatherNetworkDataSource
+    private val weatherNetworkDataSource: WeatherNetworkDataSource,
+    private val weatherLocationDao: WeatherLocationDao
 
 ) : ForecastRepository {
     init {
@@ -56,5 +59,11 @@ class ForecastRepositoryImpl(
     private fun isFetchNeeded(lastfetchTime:ZonedDateTime):Boolean{
         val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
         return lastfetchTime.isBefore(thirtyMinutesAgo)
+    }
+
+    override suspend fun getWeatherLocation(): LiveData<WeatherLocation>{
+        return withContext(Dispatchers.IO){
+            return@withContext weatherLocationDao.getLocation()
+        }
     }
 }

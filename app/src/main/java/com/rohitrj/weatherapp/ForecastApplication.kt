@@ -4,6 +4,8 @@ import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.rohitrj.weatherapp.data.db.CurrentDatabase
 import com.rohitrj.weatherapp.data.network.*
+import com.rohitrj.weatherapp.data.provider.UnitProvider
+import com.rohitrj.weatherapp.data.provider.UnitProviderImpl
 import com.rohitrj.weatherapp.data.repository.ForecastRepository
 import com.rohitrj.weatherapp.data.repository.ForecastRepositoryImpl
 import com.rohitrj.weatherapp.ui.weather.today.TodayViewmodelFactory
@@ -25,7 +27,8 @@ class ForecastApplication : Application(), KodeinAware {
         bind() from singleton { WeatherApiService(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance()) }
-        bind() from provider { TodayViewmodelFactory(instance()) }
+        bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
+        bind() from provider { TodayViewmodelFactory(instance(), instance()) }
 
     }
 
